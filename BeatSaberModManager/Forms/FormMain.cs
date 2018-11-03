@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using BeatSaberModManager.Core;
@@ -129,7 +129,7 @@ namespace BeatSaberModManager
         private void CheckDefaultMod(ReleaseInfo release, ListViewItem item)
         {
             string link = release.downloadLink.ToLower();
-            if (link.Contains("song-loader"))
+            if (link.Contains("song-loader") || link.Contains("scoresaber"))
             {
                 item.Text = $"[REQUIRED] {release.title}";
                 item.BackColor = Color.LightGray;
