@@ -46,6 +46,9 @@ namespace BeatSaberModManager.Core
 
         public void CheckForUpdates()
         {
+            // Don't check for TE updates
+            return;
+
             // Define application paths
             string path = Application.ExecutablePath;
             string installDir = Path.GetDirectoryName(path);
