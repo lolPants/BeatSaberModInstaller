@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using BeatSaberModManager.DataModels;
 using BeatSaberModManager.Dependencies.SimpleJSON;
 namespace BeatSaberModManager.Core
@@ -37,6 +38,8 @@ namespace BeatSaberModManager.Core
 
         public void PopulateReleases()
         {
+            const string TournamentCategory = "Tournament";
+
             string raw = GetModSaberReleases();
             if (raw != null)
             {
@@ -47,6 +50,26 @@ namespace BeatSaberModManager.Core
 
                     List<ModLink> dependsOn = NodeToLinks(current["dependsOn"]);
                     List<ModLink> conflictsWith = NodeToLinks(current["conflictsWith"]);
+
+                    // Tournament Edition Replacements
+                    if (current["name"] == "scoresaber")
+                    {
+                        current["title"] = "Score Saber Tournament Edition";
+                        current["category"] = TournamentCategory;
+
+                        string v = current["version"];
+                        current["version"] = $"{v}-te";
+
+                        string steamURL = current["files"][0]["url"];
+                        string oculusURL = current["files"][1]["url"];
+
+                        string regex = @"(https:\/\/(?:staging|www)\.modsaber\.org)\/download\/(steam|oculus)\/([a-z]+)\/(?:[0-9.]+)";
+                        string teVersion = "te";
+                        string replacement = $"$1/cdn/tournament/$3-{teVersion}-$2.zip";
+
+                        current["files"][0]["url"] = Regex.Replace(steamURL, regex, replacement);
+                        current["files"][1]["url"] = Regex.Replace(oculusURL, regex, replacement);
+                    }
 
                     var files = current["files"];
                     if (files.Count > 1)
@@ -70,6 +93,15 @@ namespace BeatSaberModManager.Core
                             new ReleaseInfo(current["name"], current["title"], current["version"], current["author"],
                             current["description"], current["weight"], current["gameVersion"],
                             files["steam"]["url"], current["category"], Platform.Default, dependsOn, conflictsWith));
+                    }
+
+                    // Maps
+                    if (current["name"] == "beatsaverdownloader")
+                    {
+                        CreateRelease(
+                            new ReleaseInfo("tournament-maps", "Tournament Maps", "1.0.0-te", "various-mappers",
+                            "", 998, current["gameVersion"], $"{ModSaberURL}/cdn/tournament/maps.zip",
+                            TournamentCategory, Platform.Default, new List<ModLink>(), new List<ModLink>()));
                     }
                 }
             }
