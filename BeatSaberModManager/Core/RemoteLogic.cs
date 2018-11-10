@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using System.Linq;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using BeatSaberModManager.DataModels;
@@ -39,6 +40,7 @@ namespace BeatSaberModManager.Core
         public void PopulateReleases()
         {
             const string TournamentCategory = "Tournament";
+            string[] AllowedMods = new string[] { "song-loader", "scoresaber", "beatsaverdownloader" };
 
             string raw = GetModSaberReleases();
             if (raw != null)
@@ -47,6 +49,8 @@ namespace BeatSaberModManager.Core
                 for (int i = 0; i < mods.Count; i++)
                 {
                     var current = mods[i];
+                    if (!AllowedMods.Contains((string)current["name"]))
+                        continue;
 
                     List<ModLink> dependsOn = NodeToLinks(current["dependsOn"]);
                     List<ModLink> conflictsWith = NodeToLinks(current["conflictsWith"]);
