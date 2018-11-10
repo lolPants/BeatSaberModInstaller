@@ -48,6 +48,9 @@ namespace BeatSaberModManager.Core
             } catch (Exception ex)
             {
                 StatusUpdate("Install failed! " + ex.ToString());
+#if DEBUG
+                Console.WriteLine(ex.ToString());
+#endif
             }
             
         }
