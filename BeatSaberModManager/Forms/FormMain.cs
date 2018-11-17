@@ -138,7 +138,7 @@ namespace BeatSaberModManager
                 release.install = true;
                 item.Checked = true;
             }
-            else if (release.name == "tournament-maps" || link.Contains("beatsaver"))
+            else if (release.name == "tournament-playlist" || link.Contains("beatsaver"))
             {
                 item.Checked = true;
                 release.install = true;

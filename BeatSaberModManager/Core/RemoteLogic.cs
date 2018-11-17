@@ -103,7 +103,7 @@ namespace BeatSaberModManager.Core
                     if (current["name"] == "beatsaverdownloader")
                     {
                         CreateRelease(
-                            new ReleaseInfo("tournament-maps", "Tournament Maps", "1.0.0-te", "various-mappers",
+                            new ReleaseInfo("tournament-playlist", "Tournament Maps Playlist", "1.0.0-te", "various-mappers",
                             "", 998, current["gameVersion"], $"{ModSaberURL}/cdn/tournament/maps.zip",
                             TournamentCategory, Platform.Default, new List<ModLink>(), new List<ModLink>()));
                     }
